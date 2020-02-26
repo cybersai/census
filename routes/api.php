@@ -16,3 +16,11 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/token', 'TokenController');
+Route::post('/users', 'UserController@store');
+
+Route::middleware('auth:airlock')->group(function () {
+   Route::apiResource('/bios', 'BioController');
+   Route::apiResource('/users', 'UserController')->except(['store']);
+});

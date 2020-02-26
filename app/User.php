@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Airlock\HasApiTokens;
 
 class User extends Authenticatable
@@ -37,4 +38,15 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function bio()
+    {
+        return $this->hasOne(Bio::class);
+    }
+
+    public static function create(array $attributes = [])
+    {
+        $attributes['password'] = Hash::make($attributes['password']);
+        return parent::query()->create($attributes);
+    }
 }
